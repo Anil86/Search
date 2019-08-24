@@ -1,7 +1,7 @@
 ﻿using System;
 using static System.Console;
 
-namespace Search
+namespace Search.BinarySearch
 {
     public class PaintersPartitionProblem
     {

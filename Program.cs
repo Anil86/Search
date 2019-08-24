@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Search.BinarySearch;
 
 namespace Search
 {
