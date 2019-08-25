@@ -6,7 +6,8 @@ namespace Search
     {
         static void Main(string[] args)
         {
-            PaintersPartitionProblem.Work();
+            //PaintersPartitionProblem.Work();
+            ElementOnceInSortedArray.Work();
         }
     }
 }
