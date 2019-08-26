@@ -5,40 +5,45 @@ namespace Search.BinarySearch
 {
     public class PaintersPartitionProblem
     {
-        private int MinimizeMaxWorkBinary(int noOfPainters, int[] boards)
+        private int MinimizeMaxBoards(int[] boards, int noOfPainters)
         {
-            int min = int.MinValue,   // If no.of painters = no.of boards
-                max = 0;   // if only 1 painter
+            // Optimizations
+            if (boards.Length == 1) return boards[0];   // If only 1 board, return it
+
+            int maxBoard = int.MinValue, total = 0;
             foreach (var board in boards)
             {
-                min = Math.Max(min, board);
-                max += board;
+                maxBoard = Math.Max(board, maxBoard);
+                total += board;
             }
 
-            return MinimizeMaxWork(min, max);
+            if (noOfPainters == 1) return total;   // If only 1 painter, he paints all boards
+            if (noOfPainters >= boards.Length) return maxBoard;   // If painters >= boards, return max board
+
+
+            // Max time lies between min (when no.of painters = no.of boards) & max (when no.of painter = 1)
+            return MinimizeMaxBoards(maxBoard, total);
 
 
 
-            int MinimizeMaxWork(int minLocal, int maxLocal)
+            int MinimizeMaxBoards(int min, int max)
             {
-                // Solve small sum-problems
-                if (minLocal == maxLocal) return minLocal;
+                // Solve small sub-problems
+                if (min == max) return min;
 
 
-                // Divide & Conquer
-                int mid = (minLocal + maxLocal) / 2;
+                // Divide & combine
+                int mid = (min + max) / 2;
+                int obtainedNoOfPainters = CalculatePainters(mid);   // No.of painters if max time = mid
 
-                // No.of painters for "max boards" sum = mid
-                int noOfPaintersLocal = CalculateNoOfPainters(mid);
-
-                return noOfPaintersLocal > noOfPainters
-                    ? MinimizeMaxWork(mid + 1, maxLocal)   // Take right
-                    : MinimizeMaxWork(minLocal, mid);   // Take left
+                return obtainedNoOfPainters > noOfPainters
+                    ? MinimizeMaxBoards(mid + 1, max)   // Case 1: painters ↑, reduce painters by ↑ times 
+                    : MinimizeMaxBoards(min, mid);   // Case 2: painters ↓, increase painters by ↓ times 
             }
 
 
             // Calculate no.of painters for given max boards sum
-            int CalculateNoOfPainters(int maxBoards)
+            int CalculatePainters(int maxTime)
             {
                 int sum = 0, painters = 1;
 
@@ -46,12 +51,12 @@ namespace Search.BinarySearch
                 {
                     sum += board;
 
-                    if (sum > maxBoards)   // If boards go over max boards sum, increase painter
+                    if (sum > maxTime)   // If boards go over max boards sum, increase painter
                     {
                         sum = board;
                         painters++;
 
-                        // If obtained painters goes over given painters, no need to find more painters 
+                        // If obtained painters goes over given painters, no need to find more painters
                         if (painters > noOfPainters) break;
                     }
                 }
@@ -77,7 +82,7 @@ namespace Search.BinarySearch
             //    189, 107, 444, 400, 84, 270, 225, 334, 410, 433, 249, 193, 487, 312, 493, 430, 422, 208, 90, 245, 337,
             //    234, 168, 360
             //};
-            // Ans: 740   // Calls: 222
+            // Ans: 740
 
             //int noOfPainters = 26;
             //int[] boards =
@@ -85,9 +90,9 @@ namespace Search.BinarySearch
             //    274, 465, 130, 135, 254, 45, 70, 122, 149, 95, 453, 65, 392, 331, 316, 484, 372, 339, 45, 46, 31, 167,
             //    351, 415, 387, 275, 355, 440, 290, 462, 436, 416, 279, 66, 403, 33, 464, 473, 8, 113, 420, 461, 30, 312
             //};
-            // Ans: 647   // Calls: 776
+            // Ans: 647
 
-            int fairMaxWork = new PaintersPartitionProblem().MinimizeMaxWorkBinary(noOfPainters, boards);
+            int fairMaxWork = new PaintersPartitionProblem().MinimizeMaxBoards(boards, noOfPainters);
             WriteLine(fairMaxWork);
         }
     }
