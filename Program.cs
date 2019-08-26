@@ -7,7 +7,8 @@ namespace Search
         static void Main(string[] args)
         {
             //PaintersPartitionProblem.Work();
-            ElementOnceInSortedArray.Work();
+            //ElementOnceInSortedArray.Work();
+            SumMiddleElements2SortedArrays.Work();
         }
     }
 }
